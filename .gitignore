@@ -1,0 +1,69 @@
+# Node.js and dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+logs/*.log
+debug.log
+error.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory (for testing frameworks like Jest)
+coverage/
+.nyc_output/
+
+# Build outputs
+dist/
+build/
+tmp/
+temp/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE and Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Optional cache directories
+.cache/
+.parcel-cache/
+.next/
+out/
+
+# Local database and uploads
+data/
+uploads/
+mongodb-data/
+
+# PM2 logs and ecosystem files
+pm2.log
+ecosystem.config.js
+
+# TypeScript build (if using TS)
+*.tsbuildinfo
+
+# Docker
+docker-compose.override.yml
+.docker/
