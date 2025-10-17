@@ -1,20 +1,20 @@
 const express = require("express");
 const app = express();
 
-app.use("/admin", (req, res, next) => {
-  const token = "xyz";
-  isAuthorised = token === "xyz";
-  if (!isAuthorised) {
-    res.status(401).send("Unauthorised");
+app.use("/user", (req, res) => {
+  throw new Error("jfjdfdbah");
+
+  res.send("Hello User");
+});
+
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("Somthing went wrong");
   } else {
     next();
   }
 });
 
-app.use("/admin/getAllData", (req, res) => {
-  res.send("Admin data");
-});
-
 app.listen(7777, () => {
-  console.log("Listening on port 7777");
+  console.log("Listenig to port 7777");
 });
