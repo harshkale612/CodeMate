@@ -9,7 +9,28 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("New user created successfully");
   } catch (err) {
-    res.status(400).send("Somthing went wrong " + err);
+    res.status(400).send("Somthing went wrong ");
+  }
+});
+app.get("/user", async (req, res) => {
+  const userMail = req.body.emailID;
+  try {
+    const user = await User.findOne({ emailID: userMail });
+    if (!user) {
+      res.status(404).send("User not found");
+    } else {
+      res.send(user);
+    }
+  } catch (err) {
+    console.error("Somthing went wrong");
+  }
+});
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (err) {
+    console.error("Something went wrong ");
   }
 });
 
