@@ -34,12 +34,21 @@ app.get("/user", async (req, res) => {
     console.error("Somthing went wrong");
   }
 });
-app.patch("/user");
+app.patch("/user", async (req, res) => {
+  const userID = req.body.userID;
+  const data = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(userID, data);
+    res.send("User updated successfully");
+  } catch (err) {
+    console.error("Something went wrong");
+  }
+});
 app.delete("/user", async (req, res) => {
-  const userID = req.body._id;
+  const userID = req.body.userID;
 
   try {
-    const user = await User.deleteOne({ _id: userID });
+    const user = await User.findByIdAndDelete(userID);
     res.send("User deleted successfully");
   } catch (err) {
     console.error("Something went wrong");
