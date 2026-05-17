@@ -12,6 +12,15 @@ app.post("/signup", async (req, res) => {
     res.status(400).send("Somthing went wrong ");
   }
 });
+
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (err) {
+    console.error("Something went wrong ");
+  }
+});
 app.get("/user", async (req, res) => {
   const userMail = req.body.emailID;
   try {
@@ -25,15 +34,17 @@ app.get("/user", async (req, res) => {
     console.error("Somthing went wrong");
   }
 });
-app.get("/feed", async (req, res) => {
+app.patch("/user");
+app.delete("/user", async (req, res) => {
+  const userID = req.body._id;
+
   try {
-    const users = await User.find({});
-    res.send(users);
+    const user = await User.deleteOne({ _id: userID });
+    res.send("User deleted successfully");
   } catch (err) {
-    console.error("Something went wrong ");
+    console.error("Something went wrong");
   }
 });
-
 connectDB()
   .then(() => {
     console.log("Database connected successfully");
