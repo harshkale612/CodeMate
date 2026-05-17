@@ -9,7 +9,7 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("New user created successfully");
   } catch (err) {
-    res.status(400).send("Somthing went wrong ");
+    res.status(400).send("Somthing went wrong " + err);
   }
 });
 
@@ -18,7 +18,7 @@ app.get("/users", async (req, res) => {
     const users = await User.find({});
     res.send(users);
   } catch (err) {
-    console.error("Something went wrong ");
+    res.status(400).send("Somthing went wrong " + err);
   }
 });
 app.get("/user", async (req, res) => {
@@ -31,17 +31,20 @@ app.get("/user", async (req, res) => {
       res.send(user);
     }
   } catch (err) {
-    console.error("Somthing went wrong");
+    res.status(400).send("Somthing went wrong " + err);
   }
 });
 app.patch("/user", async (req, res) => {
   const userID = req.body.userID;
   const data = req.body;
   try {
-    const user = await User.findByIdAndUpdate(userID, data);
+    const user = await User.findByIdAndUpdate(userID, data, {
+      runValidators: true,
+    });
+
     res.send("User updated successfully");
   } catch (err) {
-    console.error("Something went wrong");
+    res.status(400).send("Somthing went wrong " + err);
   }
 });
 app.delete("/user", async (req, res) => {
@@ -51,7 +54,7 @@ app.delete("/user", async (req, res) => {
     const user = await User.findByIdAndDelete(userID);
     res.send("User deleted successfully");
   } catch (err) {
-    console.error("Something went wrong");
+    res.status(400).send("Somthing went wrong " + err);
   }
 });
 connectDB()
