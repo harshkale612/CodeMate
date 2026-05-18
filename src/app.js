@@ -34,10 +34,20 @@ app.get("/user", async (req, res) => {
     res.status(400).send("Somthing went wrong " + err);
   }
 });
-app.patch("/user", async (req, res) => {
-  const userID = req.body.userID;
+app.patch("/user/:userID", async (req, res) => {
+  const userID = req.params.userID;
   const data = req.body;
   try {
+    const Allowed_Updates = ["photoUrl", "about", "gender", "age", "skills"];
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      Allowed_Updates.includes(k),
+    );
+    if (!isUpdateAllowed) {
+      throw new Error("Update not allowed");
+    }
+    if (data?.skills.length > 10) {
+      throw new Error("Skills must be less than 10");
+    }
     const user = await User.findByIdAndUpdate(userID, data, {
       runValidators: true,
     });
