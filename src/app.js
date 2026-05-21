@@ -4,7 +4,12 @@ const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const app = express();
 const { validSignUpData } = require("./utils/validation");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
 app.use(express.json());
+app.use(cookieParser());
+
 app.post("/signup", async (req, res) => {
   try {
     validSignUpData(req);
@@ -27,6 +32,7 @@ app.post("/login", async (req, res) => {
   try {
     const { emailID, password } = req.body;
     const user = await User.findOne({ emailID: emailID });
+
     if (!user) {
       throw new Error("Invalid Credentials");
     }
@@ -34,6 +40,9 @@ app.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       throw new Error("Invalid Credentials");
     } else {
+      const token = await jwt.sign({ _id: user._id }, "Codemate@123");
+
+      res.cookie("token", token);
       res.send("Login successfully");
     }
   } catch (err) {
@@ -41,6 +50,24 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("Invalid token");
+    }
+    const decodeMessage = await jwt.verify(token, "Codemate@123");
+    const { _id } = decodeMessage;
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("Invaid User");
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(400).send("Somthing went wrong " + err.message);
+  }
+});
 app.get("/users", async (req, res) => {
   try {
     const users = await User.find({});
